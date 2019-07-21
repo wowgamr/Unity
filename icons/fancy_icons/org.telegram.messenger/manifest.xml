@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Icon version="1" frameRate="0" width="182" height="182" screenWidth="1080" resDensity="480" extraResources="sw720-den320::0.7407,sw1080-den440::0.9259,sw1440-den640::1.2346" extraScales="sw720-den320:0.7473,sw1080-den440:0.9231,sw1440-den640:1.2307">
+    <!-- 应用商店 -->
+    <ExternalCommands>
+        <!-- 初始化 -->
+        <Trigger action="init,present,back_home_cancel">
+            <VariableCommand name="useQuietImage" expression="1"/>
+            <AnimationCommand target="iconAni" command="play(350,350)"/>
+        </Trigger>
+        <!-- 回桌面 -->
+        <Trigger action="back_home_start">
+            <VariableCommand name="useQuietImage" expression="0"/>
+            <AnimationCommand target="iconAni" command="play(0,0)"/>
+        </Trigger>
+        <!-- 回到桌面 -->
+        <Trigger action="back_home_finish" >
+            <VariableCommand name="useQuietImage" expression="0"/>
+            <!-- 动画部分 -->
+            <AnimationCommand target="iconAni" command="play(0,350)"/>
+            <!-- 动态帧率 -->
+            <AnimationCommand target="panel_framerate_controller" command="play"/>
+        </Trigger>
+    </ExternalCommands>
+    <FramerateController name="panel_framerate_controller" initPause="true" loop="false">
+        <ControlPoint frameRate="0" time="0"/>
+        <ControlPoint frameRate="60" time="1"/>
+        <ControlPoint frameRate="60" time="500"/>
+        <ControlPoint frameRate="0" time="501"/>
+    </FramerateController>
+    <Var name="iconAni">
+        <VariableAnimation name="iconAnimation" initPause="true" loop="false">
+            <AniFrame value="0" time="0"/>
+            <AniFrame value="21" time="350"/>
+            <Triggers>
+                <Trigger action="end" condition="#iconAnimation.current_frame == 350">
+                    <VariableCommand name="useQuietImage" expression="1"/>
+                </Trigger>
+            </Triggers>
+        </VariableAnimation>
+    </Var>
+    <Image x="91" y="91" align="center" alignV="center" srcExp="'telegram' + int(#iconAni) + '.png'"/>
+</Icon>
